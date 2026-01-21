@@ -571,7 +571,7 @@
       <div class="hero-left">
         <h2>Building scalable mobile apps with performance, stability & modern UI.</h2>
         <p class="meta">
-          3+ years experience • Android, Android TV, Fire TV • Kotlin/Java/Flutter • Swift 
+          3+ years experience • Android, Android TV, Fire TV • Kotlin/Java/Flutter • Learning Swift (iOS)
         </p>
 
         <p>
@@ -672,7 +672,7 @@
       <div class="grid">
 
         <div class="card project">
-          <h3 style="margin-bottom:6px;">📌 Meeting Box </h3>
+          <h3 style="margin-bottom:6px;">📌 Meeting Box (Android App)</h3>
           <p style="color:var(--muted); font-size:14px; margin-bottom:10px;">
             Meeting management Android application built with Kotlin, MVVM/Clean Architecture and real-time sync.
           </p>
@@ -684,7 +684,7 @@
         </div>
 
         <div class="card project">
-          <h3 style="margin-bottom:6px;">❤️ Beloved by Kaefer </h3>
+          <h3 style="margin-bottom:6px;">❤️ Beloved by Kaefer (Android SDK App)</h3>
           <p style="color:var(--muted); font-size:14px; margin-bottom:10px;">
             Android application developed using modern SDK features, best practices and clean UI implementation.
           </p>
@@ -775,7 +775,7 @@
       <div class="section-title">Education</div>
       <div class="card">
         <p><b>RMD Sinhgad School of Engineering</b> — Pune, India</p>
-        <p style="color:var(--muted); font-size:14px;">B.E. Computer Engineering •  2015 –  2020</p>
+        <p style="color:var(--muted); font-size:14px;">B.E. Computer Engineering • Aug 2015 – Jun 2020</p>
 
         <div style="height:10px;"></div>
 
@@ -820,111 +820,112 @@
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
-  <script>
-    // Year
-    document.getElementById("year").textContent = new Date().getFullYear();
+<script>
+  // Year
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Theme toggle
-    const themeBtn = document.getElementById("themeBtn");
-    themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("light");
-      themeBtn.textContent = document.body.classList.contains("light") ? "☀️ Theme" : "🌙 Theme";
+  // Theme toggle
+  const themeBtn = document.getElementById("themeBtn");
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+    themeBtn.textContent = document.body.classList.contains("light") ? "☀️ Theme" : "🌙 Theme";
+  });
+
+  // Scroll reveal animation
+  const reveals = document.querySelectorAll(".reveal");
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add("show");
     });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => revealObserver.observe(el));
 
-    // Scroll reveal animation
-    const reveals = document.querySelectorAll(".reveal");
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("show");
-      });
-    }, { threshold: 0.15 });
-
-    reveals.forEach(el => revealObserver.observe(el));
-
-    // Skill progress animation when visible
-    const bars = document.querySelectorAll(".bar span");
-    const barObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          el.style.width = el.getAttribute("data-width");
-        }
-      });
-    }, { threshold: 0.3 });
-
-    bars.forEach(b => barObserver.observe(b));
-
-    // ===========================
-    // EmailJS Contact Form + Auto Reply
-    // ===========================
-    const form = document.getElementById("contactFormId");
-
-    const successMsg = document.getElementById("successMsg");
-    const errorMsg = document.getElementById("errorMsg");
-
-    const sendBtn = document.getElementById("sendBtn");
-    const spinner = document.getElementById("spinner");
-    const btnText = document.getElementById("btnText");
-
-    // Your EmailJS Keys
-    const EMAILJS_PUBLIC_KEY = "JD2xflENhhyGe-dGB";
-    const EMAILJS_SERVICE_ID = "service_9atb2pe";
-    const EMAILJS_TEMPLATE_ID = "template_1zkonql";
-
-    // 🔥 Create Auto Reply template and paste its ID here
-    const EMAILJS_AUTOREPLY_TEMPLATE_ID = "template_gwr5oxd";
-
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-
-    function showToast(type) {
-      successMsg.style.display = "none";
-      errorMsg.style.display = "none";
-
-      if (type === "success") {
-        successMsg.style.display = "block";
-        setTimeout(() => successMsg.style.display = "none", 5000);
-      } else {
-        errorMsg.style.display = "block";
-        setTimeout(() => errorMsg.style.display = "none", 5000);
+  // Skill progress animation
+  const bars = document.querySelectorAll(".bar span");
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.width = entry.target.getAttribute("data-width");
       }
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(b => barObserver.observe(b));
+
+  // ===========================
+  // EmailJS Contact Form + Auto Reply
+  // ===========================
+  const form = document.getElementById("contactFormId");
+  const successMsg = document.getElementById("successMsg");
+  const errorMsg = document.getElementById("errorMsg");
+
+  const sendBtn = document.getElementById("sendBtn");
+  const spinner = document.getElementById("spinner");
+  const btnText = document.getElementById("btnText");
+
+  // Your EmailJS Keys
+  const EMAILJS_PUBLIC_KEY = "JD2xflENhhyGe-dGB";
+  const EMAILJS_SERVICE_ID = "service_9atb2pe";
+  const EMAILJS_TEMPLATE_ID = "template_1zkonql";
+  const EMAILJS_AUTOREPLY_TEMPLATE_ID = "template_gwr5oxd";
+
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+
+  function showToast(type, text) {
+    successMsg.style.display = "none";
+    errorMsg.style.display = "none";
+
+    if (type === "success") {
+      successMsg.innerText = text || "✅ Message sent successfully!";
+      successMsg.style.display = "block";
+      setTimeout(() => successMsg.style.display = "none", 5000);
+    } else {
+      errorMsg.innerText = text || "❌ Message failed. Please try again later.";
+      errorMsg.style.display = "block";
+      setTimeout(() => errorMsg.style.display = "none", 6000);
+    }
+  }
+
+  function setLoading(isLoading) {
+    if (isLoading) {
+      sendBtn.disabled = true;
+      spinner.style.display = "inline-block";
+      btnText.textContent = "Sending...";
+    } else {
+      sendBtn.disabled = false;
+      spinner.style.display = "none";
+      btnText.textContent = "🚀 Send Message";
+    }
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // 1) Send email to YOU
+      const res1 = await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form);
+      console.log("Main Email Sent:", res1);
+
+      // 2) Auto reply email to USER
+      const res2 = await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_AUTOREPLY_TEMPLATE_ID, form);
+      console.log("Auto Reply Sent:", res2);
+
+      showToast("success", "✅ Message sent! Thank you for contacting me.");
+      form.reset();
+
+    } catch (err) {
+      console.log("EmailJS Error Full:", err);
+
+      // Show real error message in UI
+      let msg = "❌ Message failed! Please check EmailJS settings.";
+      if (err && err.text) msg = "❌ " + err.text;
+
+      showToast("error", msg);
     }
 
-    function setLoading(isLoading) {
-      if (isLoading) {
-        sendBtn.disabled = true;
-        spinner.style.display = "inline-block";
-        btnText.textContent = "Sending...";
-      } else {
-        sendBtn.disabled = false;
-        spinner.style.display = "none";
-        btnText.textContent = "🚀 Send Message";
-      }
-    }
+    setLoading(false);
+  });
+</script>
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      setLoading(true);
-
-      try {
-        // 1) Send email to YOU
-        await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form);
-
-        // 2) Send Auto-reply to USER (optional)
-        if (EMAILJS_AUTOREPLY_TEMPLATE_ID && EMAILJS_AUTOREPLY_TEMPLATE_ID !== "template_gwr5oxd") {
-          await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_AUTOREPLY_TEMPLATE_ID, form);
-        }
-
-        showToast("success");
-        form.reset();
-
-      } catch (err) {
-        console.log("EmailJS Error:", err);
-        showToast("error");
-      }
-
-      setLoading(false);
-    });
-  </script>
 </body>
 </html>
