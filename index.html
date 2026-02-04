@@ -1280,6 +1280,21 @@
               <span id="spinner" class="spinner d-none ms-2"></span>
             </button>
           </form>
+
+          <!-- Alternative Contact Info -->
+          <div style="margin-top: 30px; padding: 20px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; text-align: center;">
+            <p style="color: var(--gray); font-size: 14px; margin-bottom: 15px;">
+              Or reach me directly via:
+            </p>
+            <p style="margin-bottom: 10px;">
+              <strong style="color: var(--primary);">📧 Email:</strong> 
+              <a href="mailto:ramgadek95@gmail.com" style="color: var(--light);">ramgadek95@gmail.com</a>
+            </p>
+            <p style="margin-bottom: 0;">
+              <strong style="color: var(--primary);">📱 Phone:</strong> 
+              <a href="tel:+918855948697" style="color: var(--light);">+91 8855948697</a>
+            </p>
+          </div>
         </div>
 
         <div class="social-links">
@@ -1307,7 +1322,7 @@
   <div class="toast-notification" id="toast"></div>
 
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -1374,13 +1389,27 @@
       codeRain.appendChild(char);
     }
 
-    // EmailJS Setup
-    const EMAILJS_PUBLIC_KEY = "JD2xflENhhyGe-dGB";
-    const EMAILJS_SERVICE_ID = "service_9atb2pe";
-    const EMAILJS_TEMPLATE_ID = "template_1zkonql";
-    const EMAILJS_AUTOREPLY_TEMPLATE_ID = "template_gwr5oxd";
+    // EmailJS Setup - Initialize when ready
+    let emailjsInitialized = false;
+    
+    // Check if EmailJS is loaded
+    if (typeof emailjs !== 'undefined') {
+      try {
+        // Your EmailJS credentials
+        const EMAILJS_PUBLIC_KEY = "JD2xflENhhyGe-dGB";
+        const EMAILJS_SERVICE_ID = "service_9atb2pe";
+        const EMAILJS_TEMPLATE_ID = "template_1zkonql";
+        const EMAILJS_AUTOREPLY_TEMPLATE_ID = "template_gwr5oxd";
 
-    emailjs.init(EMAILJS_PUBLIC_KEY);
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        emailjsInitialized = true;
+        console.log('✅ EmailJS initialized successfully');
+      } catch (error) {
+        console.error('❌ EmailJS initialization failed:', error);
+      }
+    } else {
+      console.error('❌ EmailJS library not loaded');
+    }
 
     // Toast Notification
     function showToast(message, isError = false) {
@@ -1403,19 +1432,69 @@
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      // Get form data
+      const formData = new FormData(contactForm);
+      const name = formData.get('from_name');
+      const email = formData.get('reply_to');
+      const subject = formData.get('subject');
+      const message = formData.get('message');
+
+      console.log('📧 Form Data:', { name, email, subject, message });
+
       submitBtn.disabled = true;
       spinner.classList.remove('d-none');
       btnText.textContent = 'Sending...';
 
+      // Check if EmailJS is initialized
+      if (!emailjsInitialized || typeof emailjs === 'undefined') {
+        console.error('❌ EmailJS not initialized');
+        showToast('⚠️ Email service unavailable. Please email directly at ramgadek95@gmail.com', true);
+        submitBtn.disabled = false;
+        spinner.classList.add('d-none');
+        btnText.textContent = 'Send Message';
+        return;
+      }
+
       try {
-        await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, contactForm);
-        await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_AUTOREPLY_TEMPLATE_ID, contactForm);
+        console.log('📤 Sending main email...');
+        const response1 = await emailjs.sendForm(
+          'service_9atb2pe',
+          'template_1zkonql',
+          contactForm
+        );
+        console.log('✅ Main email sent:', response1);
+
+        console.log('📤 Sending auto-reply...');
+        const response2 = await emailjs.sendForm(
+          'service_9atb2pe',
+          'template_gwr5oxd',
+          contactForm
+        );
+        console.log('✅ Auto-reply sent:', response2);
 
         showToast('✅ Message sent successfully! I\'ll get back to you soon.');
         contactForm.reset();
       } catch (error) {
-        console.error('Error:', error);
-        showToast('❌ Failed to send message. Please try again.', true);
+        console.error('❌ EmailJS Error:', error);
+        console.error('Error details:', {
+          status: error.status,
+          text: error.text,
+          message: error.message
+        });
+        
+        // Show more helpful error message
+        let errorMsg = '❌ Failed to send message. ';
+        if (error.text) {
+          errorMsg += error.text;
+        } else if (error.status === 412) {
+          errorMsg += 'EmailJS configuration error. Please check your settings.';
+        } else if (error.status === 422) {
+          errorMsg += 'Invalid template or parameters.';
+        } else {
+          errorMsg += 'Please email directly at ramgadek95@gmail.com';
+        }
+        
+        showToast(errorMsg, true);
       } finally {
         submitBtn.disabled = false;
         spinner.classList.add('d-none');
@@ -1440,10 +1519,3 @@
 
     document.querySelectorAll('.skill-item, .project-card, .timeline-item').forEach(el => {
       el.style.opacity = '0';
-      el.style.transform = 'translateY(30px)';
-      el.style.transition = 'all 0.6s ease';
-      observer.observe(el);
-    });
-  </script>
-</body>
-</html>
