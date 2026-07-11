@@ -527,18 +527,21 @@
       clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     }
 
-    .skill-item:hover .skill-icon {
-      transform: scale(1.2);
+    .skill-item:hover .skill-logo {
+      transform: scale(1.18) rotate(4deg);
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.25));
     }
 
     .skill-item:hover .skill-name {
       color: var(--darker);
     }
 
-    .skill-icon {
-      font-size: 36px;
-      margin-bottom: 10px;
-      transition: transform 0.3s ease;
+    .skill-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      margin-bottom: 12px;
+      transition: transform 0.3s ease, filter 0.3s ease;
     }
 
     .skill-name {
@@ -982,6 +985,7 @@
           <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
           <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
           <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+          <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
           <li class="nav-item ms-3">
             <button class="theme-toggle" id="themeToggle">
@@ -1057,22 +1061,90 @@
       </div>
 
       <div class="skills-grid">
-        <div class="skill-item"><div class="skill-icon">💙</div><div class="skill-name">Flutter</div></div>
-        <div class="skill-item"><div class="skill-icon">🎯</div><div class="skill-name">Dart</div></div>
-        <div class="skill-item"><div class="skill-icon">🤖</div><div class="skill-name">Android</div></div>
-        <div class="skill-item"><div class="skill-icon">🟣</div><div class="skill-name">Kotlin</div></div>
-        <div class="skill-item"><div class="skill-icon">☕</div><div class="skill-name">Java</div></div>
-        <div class="skill-item"><div class="skill-icon">🏗️</div><div class="skill-name">Clean Architecture</div></div>
-        <div class="skill-item"><div class="skill-icon">🧩</div><div class="skill-name">BLoC / Provider</div></div>
-        <div class="skill-item"><div class="skill-icon">🟢</div><div class="skill-name">Node.js</div></div>
-        <div class="skill-item"><div class="skill-icon">🐘</div><div class="skill-name">PHP / Laravel</div></div>
-        <div class="skill-item"><div class="skill-icon">🗄️</div><div class="skill-name">MySQL</div></div>
-        <div class="skill-item"><div class="skill-icon">🧠</div><div class="skill-name">Generative AI</div></div>
-        <div class="skill-item"><div class="skill-icon">💬</div><div class="skill-name">LLM Apps</div></div>
-        <div class="skill-item"><div class="skill-icon">🔥</div><div class="skill-name">Firebase</div></div>
-        <div class="skill-item"><div class="skill-icon">🌐</div><div class="skill-name">REST APIs</div></div>
-        <div class="skill-item"><div class="skill-icon">📺</div><div class="skill-name">ExoPlayer</div></div>
-        <div class="skill-item"><div class="skill-icon">🚀</div><div class="skill-name">CI/CD & Releases</div></div>
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" class="skill-logo" alt="Flutter logo" loading="lazy">
+          <div class="skill-name">Flutter</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg" class="skill-logo" alt="Dart logo" loading="lazy">
+          <div class="skill-name">Dart</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg" class="skill-logo" alt="Android logo" loading="lazy">
+          <div class="skill-name">Android</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg" class="skill-logo" alt="Kotlin logo" loading="lazy">
+          <div class="skill-name">Kotlin</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" class="skill-logo" alt="Java logo" loading="lazy">
+          <div class="skill-name">Java</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://api.iconify.design/material-symbols/account-tree-outline.svg?color=%2300ff88" class="skill-logo" alt="Clean Architecture icon" loading="lazy">
+          <div class="skill-name">Clean Architecture</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://api.iconify.design/material-symbols/schema-outline.svg?color=%230066ff" class="skill-logo" alt="BLoC and Provider icon" loading="lazy">
+          <div class="skill-name">BLoC / Provider</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" class="skill-logo" alt="Node.js logo" loading="lazy">
+          <div class="skill-name">Node.js</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" class="skill-logo" alt="PHP logo" loading="lazy">
+          <div class="skill-name">PHP</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" class="skill-logo" alt="Laravel logo" loading="lazy">
+          <div class="skill-name">Laravel</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" class="skill-logo" alt="MySQL logo" loading="lazy">
+          <div class="skill-name">MySQL</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://api.iconify.design/hugeicons/artificial-intelligence-04.svg?color=%23ff0066" class="skill-logo" alt="Generative AI icon" loading="lazy">
+          <div class="skill-name">Generative AI</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://api.iconify.design/mdi/chat-processing-outline.svg?color=%2300ff88" class="skill-logo" alt="LLM applications icon" loading="lazy">
+          <div class="skill-name">LLM Apps</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" class="skill-logo" alt="Firebase logo" loading="lazy">
+          <div class="skill-name">Firebase</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://api.iconify.design/mdi/api.svg?color=%230066ff" class="skill-logo" alt="REST API icon" loading="lazy">
+          <div class="skill-name">REST APIs</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://api.iconify.design/material-symbols/live-tv-outline.svg?color=%23ff0066" class="skill-logo" alt="ExoPlayer icon" loading="lazy">
+          <div class="skill-name">ExoPlayer</div>
+        </div>
+
+        <div class="skill-item">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/githubactions/githubactions-original.svg" class="skill-logo" alt="CI/CD logo" loading="lazy">
+          <div class="skill-name">CI/CD &amp; Releases</div>
+        </div>
       </div>
     </div>
   </section>
@@ -1167,6 +1239,48 @@
               • Implemented HLS/DASH streaming, Widevine DRM, adaptive bitrate, and buffer management<br/>
               • Integrated Retrofit, Firebase, AppsFlyer, CleverTap, and iZooto<br/>
               • Supported testing, production debugging, and stable application releases
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Education Section -->
+  <section id="education">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-number">Academic Background</div>
+        <h2 class="section-title">Education</h2>
+        <p class="section-subtitle">
+          My academic foundation in computer engineering and software development
+        </p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">2015 - 2020</span>
+            <h3 class="timeline-title">Bachelor of Engineering in Computer Engineering</h3>
+            <div class="timeline-company">RMD Sinhgad School of Engineering • Pune, Maharashtra</div>
+            <p class="timeline-description">
+              Developed a strong foundation in software engineering, object-oriented programming,
+              database management systems, computer networks, operating systems, and application development.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">2012 - 2015</span>
+            <h3 class="timeline-title">Diploma in Computer Applications</h3>
+            <div class="timeline-company">Ekalavya Shikshan Sanstha's Polytechnic • Pune, Maharashtra</div>
+            <p class="timeline-description">
+              Built practical programming and computing fundamentals covering software development,
+              databases, networking, and core computer applications.
             </p>
           </div>
         </div>
