@@ -7,3 +7,13 @@
 @media(prefers-reduced-motion:reduce){.code-rain{display:none}}
 
 .project-logo{display:block;width:112px;height:112px;object-fit:contain;background:#fff;padding:8px;border-radius:22px;box-shadow:0 14px 35px #0003}
+
+.hero-visual.avatar-visual{height:auto;padding-left:24px}
+.avatar-portrait{margin:0;width:100%}
+.avatar-image-link{display:block;overflow:hidden;border:1px solid var(--border);border-radius:22px;background:#090c19;box-shadow:0 24px 65px #0003;transition:border-color .2s}
+.avatar-image-link:hover{border-color:var(--cyan)}
+.avatar-image-link:focus-visible{outline:3px solid var(--cyan);outline-offset:5px}
+.avatar-portrait img{display:block;width:100%;height:auto}
+.avatar-portrait figcaption{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:11px;line-height:1.6}
+.avatar-portrait figcaption a{display:inline-flex;align-items:center;gap:4px;color:var(--cyan);font-weight:700}
+@media(max-width:800px){.hero-visual.avatar-visual{padding-left:0;max-width:680px;width:100%;margin-left:auto;margin-right:auto}.avatar-portrait figcaption{justify-content:center}.identity-line{justify-content:center;flex-wrap:wrap}}
