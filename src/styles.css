@@ -8,5 +8,6 @@
 
 .project-logo{display:block;width:112px;height:112px;object-fit:contain;background:#fff;padding:8px;border-radius:22px;box-shadow:0 14px 35px #0003}
 
-.hero-visual.avatar-visual{height:auto;padding-left:24px}
-@media(max-width:800px){.hero-visual.avatar-visual{padding-left:0;max-width:680px;width:100%;margin-left:auto;margin-right:auto}.identity-line{justify-content:center;flex-wrap:wrap}}
+/* Personal portrait inside the original mobile-product composition. */
+.phone-right .poster{background-image:linear-gradient(135deg,#34205e55,#09112620),url('../profile.jpg');background-size:cover;background-position:center 22%;box-shadow:inset 0 0 0 1px #ffffff20}.phone-right .poster svg{filter:drop-shadow(0 3px 8px #0009)}
+.phone-center .tiny-avatar{background-image:url('../profile.jpg');background-size:cover;background-position:center;color:transparent;box-shadow:0 2px 8px #20186655}
