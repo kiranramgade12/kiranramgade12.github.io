@@ -1,36 +1,1079 @@
-import { useEffect, useState, type FormEvent, type MouseEvent as ReactMouseEvent } from 'react';
-import emailjs from '@emailjs/browser';
-import { emailJsConfig } from './emailjsConfig';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import { ArrowDownRight, ArrowUpRight, Github, Linkedin, Mail, Download, Moon, Sun, Menu, X, Code2, Smartphone, Sparkles, Server, Play, ExternalLink, ChevronLeft, ChevronRight, GitBranch, Database, ShieldCheck } from 'lucide-react';
+import {
+  useEffect,
+  useState,
+  type FormEvent,
+  type MouseEvent as ReactMouseEvent,
+} from "react";
+import emailjs from "@emailjs/browser";
+import { emailJsConfig } from "./emailjsConfig";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Github,
+  Linkedin,
+  Mail,
+  Download,
+  Moon,
+  Sun,
+  Menu,
+  X,
+  Code2,
+  Smartphone,
+  Sparkles,
+  Server,
+  Play,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  GitBranch,
+  Database,
+  ShieldCheck,
+} from "lucide-react";
 
-type Project = { title:string; type:string; description:string; tags:string[]; glyph:string; logo?:string; accent:string; details:string[]; link?:string };
-const projects:Project[] = [
- {title:'GI · Bhagavad Gita Intelligence',type:'AI / FLAGSHIP',description:'An AI-powered spiritual companion combining conversational LLMs, image and video generation, voice experiences, and subscription-aware cloud services.',tags:['Flutter','Qwen LLM','Replicate','Cloudflare Workers','Firebase'],glyph:'ॐ',logo:new URL('../images/gi-logo.png',import.meta.url).href,accent:'violet',details:['Built Flutter experiences with Krishna-inspired AI conversations and multimodal generation.','Developed JavaScript Cloudflare Workers APIs and Node.js Firebase Functions.','Integrated Firebase Authentication, Firestore, content moderation, billing verification and FCM.']},
- {title:'Meetingbox',type:'NATIVE MOBILE',description:'An event-management ecosystem for Android and iOS, with agendas, attendee directories, real-time chat, live polls, QR scanning and cloud-connected workflows.',tags:['Kotlin','Swift','WebSockets','Firebase','REST APIs'],glyph:'M',logo:new URL('../images/meetingbox.jpg',import.meta.url).href,accent:'cyan',details:['Developed native Android (Kotlin) and iOS (Swift/UIKit) features.','Integrated WebSockets, Firebase, AWS services, QR scanning and push notifications.','Maintained branded event-app variants and production workflows.']},
- {title:'Beloved by Käfer',type:'NATIVE MOBILE',description:'A branded native Android and iOS event experience with polished user journeys, event content and connected services.',tags:['Kotlin','Swift','UIKit','Android SDK'],glyph:'B',logo:new URL('../images/beloved-by-kaefer.png',import.meta.url).href,accent:'rose',details:['Built and maintained native mobile experiences.','Integrated event-oriented screens, data services and release workflows.']},
- {title:'Abode',type:'FLUTTER APP',description:'A spiritual travel discovery and planning app featuring saved places, trip requests, journaling and text-to-speech.',tags:['Flutter','Dart','Firebase Auth','TTS'],glyph:'A',logo:new URL('../images/abode-logo.png',import.meta.url).href,accent:'mint',details:['Built a Flutter experience for spiritual travel exploration.','Implemented local saved places, trip requests and journaling.','Integrated Firebase phone authentication and on-device text-to-speech.']},
- {title:'Aqua Ping',type:'FLUTTER APP',description:'A lightweight hydration tracker with drink logging, daily goals, a timeline and local reminder scheduling.',tags:['Flutter','Dart','Local Notifications'],glyph:'~',logo:new URL('../images/aqua_ping_logo.png',import.meta.url).href,accent:'blue',details:['Developed a daily hydration tracker with local persistence.','Implemented timezone-aware local notifications and reminders.']},
- {title:'OTT Streaming Platforms',type:'ANDROID / TV',description:'Contributions to Sun NXT, Watcho and Timesplay across Android, Android TV and Fire TV streaming experiences.',tags:['Kotlin','Java','ExoPlayer','Media3','Widevine DRM'],glyph:'▶',accent:'amber',details:['Worked on adaptive HLS/DASH playback and DRM workflows.','Supported TV navigation, third-party SDKs, testing and production debugging.']}
+type Project = {
+  title: string;
+  type: string;
+  description: string;
+  tags: string[];
+  glyph: string;
+  logo?: string;
+  accent: string;
+  details: string[];
+  link?: string;
+};
+const projects: Project[] = [
+  {
+    title: "GI · Bhagavad Gita Intelligence",
+    type: "AI / FLAGSHIP",
+    description:
+      "An AI-powered spiritual companion combining conversational LLMs, image and video generation, voice experiences, and subscription-aware cloud services.",
+    tags: [
+      "Flutter",
+      "Qwen LLM",
+      "Replicate",
+      "Cloudflare Workers",
+      "Firebase",
+    ],
+    glyph: "ॐ",
+    logo: new URL("../images/gi-logo.png", import.meta.url).href,
+    accent: "violet",
+    link: "https://play.google.com/store/apps/details?id=com.godsintelligence.gods_intelligence&hl=en_IN",
+    details: [
+      "Built Flutter experiences with Krishna-inspired AI conversations and multimodal generation.",
+      "Developed JavaScript Cloudflare Workers APIs and Node.js Firebase Functions.",
+      "Integrated Firebase Authentication, Firestore, content moderation, billing verification and FCM.",
+    ],
+  },
+  {
+    title: "Meetingbox",
+    type: "NATIVE MOBILE",
+    description:
+      "An event-management ecosystem for Android and iOS, with agendas, attendee directories, real-time chat, live polls, QR scanning and cloud-connected workflows.",
+    tags: ["Kotlin", "Swift", "WebSockets", "Firebase", "REST APIs"],
+    glyph: "M",
+    logo: new URL("../images/meetingbox.jpg", import.meta.url).href,
+    accent: "cyan",
+    link: "https://play.google.com/store/apps/details?id=com.meetingbox.app&hl=en_IN",
+    details: [
+      "Developed native Android (Kotlin) and iOS (Swift/UIKit) features.",
+      "Integrated WebSockets, Firebase, AWS services, QR scanning and push notifications.",
+      "Maintained branded event-app variants and production workflows.",
+    ],
+  },
+  {
+    title: "Beloved by Käfer",
+    type: "NATIVE MOBILE",
+    description:
+      "A branded native Android and iOS event experience with polished user journeys, event content and connected services.",
+    tags: ["Kotlin", "Swift", "UIKit", "Android SDK"],
+    glyph: "B",
+    logo: new URL("../images/beloved-by-kaefer.png", import.meta.url).href,
+    accent: "rose",
+    link: "https://play.google.com/store/apps/details?id=com.belovedbykaefer.app&hl=en_IN",
+    details: [
+      "Built and maintained native mobile experiences.",
+      "Integrated event-oriented screens, data services and release workflows.",
+    ],
+  },
+  {
+    title: "Abode",
+    type: "FLUTTER APP",
+    description:
+      "A spiritual travel discovery and planning app featuring saved places, trip requests, journaling and text-to-speech.",
+    tags: ["Flutter", "Dart", "Firebase Auth", "TTS"],
+    glyph: "A",
+    logo: new URL("../images/abode-logo.png", import.meta.url).href,
+    accent: "mint",
+    details: [
+      "Built a Flutter experience for spiritual travel exploration.",
+      "Implemented local saved places, trip requests and journaling.",
+      "Integrated Firebase phone authentication and on-device text-to-speech.",
+    ],
+  },
+  {
+    title: "Aqua Ping",
+    type: "FLUTTER APP",
+    description:
+      "A lightweight hydration tracker with drink logging, daily goals, a timeline and local reminder scheduling.",
+    tags: ["Flutter", "Dart", "Local Notifications"],
+    glyph: "~",
+    logo: new URL("../images/aqua_ping_logo.png", import.meta.url).href,
+    accent: "blue",
+    details: [
+      "Developed a daily hydration tracker with local persistence.",
+      "Implemented timezone-aware local notifications and reminders.",
+    ],
+  },
+  {
+    title: "OTT Streaming Platforms",
+    type: "ANDROID / TV",
+    description:
+      "Contributions to Sun NXT, Watcho and Timesplay across Android, Android TV and Fire TV streaming experiences.",
+    tags: ["Kotlin", "Java", "ExoPlayer", "Media3", "Widevine DRM"],
+    glyph: "▶",
+    accent: "amber",
+    link: "https://play.google.com/store/search?q=sunnxt&c=apps&hl=en_IN",
+    details: [
+      "Worked on adaptive HLS/DASH playback and DRM workflows.",
+      "Supported TV navigation, third-party SDKs, testing and production debugging.",
+    ],
+  },
 ];
-const skillGroups=[{title:'AI & cloud',icon:Sparkles,items:['Generative AI','LLM integration','Replicate','Cloudflare Workers','Firebase','Node.js']},{title:'Mobile engineering',icon:Smartphone,items:['Kotlin','Swift / UIKit','Flutter / Dart','Android SDK','iOS','MVVM']},{title:'Platforms & tooling',icon:Server,items:['REST APIs','WebSockets','Firestore','AWS S3','Git','CI/CD']}];
-const highlights=[{tag:'01 / BUILD',title:'Native precision.',description:'Android and iOS experiences engineered with Kotlin, Swift, real-time data and robust application architecture.'},{tag:'02 / CONNECT',title:'AI that ships.',description:'LLM integrations, multimodal AI services, serverless endpoints and subscription-aware product flows.'},{tag:'03 / DELIVER',title:'From idea to release.',description:'Flutter products, platform integrations, testing, debugging and practical deployment workflows.'}];
-function Background(){
- const reduce=useReducedMotion();
- const snippets=['const build = async () => {','  await deploy(app);','};','flutter run --release','fun createExperience()','suspend fun fetchData()','import SwiftUI','const ai = await infer()','git push origin main','POST /api/v1/generate','Firebase.initializeApp()','return Response.json(data)','// ship. learn. improve.'];
- const streams=reduce?[]:Array.from({length:15},(_,index)=>({index,lines:Array.from({length:11},(_,line)=>snippets[(index*3+line*5)%snippets.length]).join('\n'),left:`${3+index*6.8}%`,duration:26+(index%6)*5,delay:-index*3.7}));
- return <div className="background" aria-hidden="true"><div className="grid-lines"/><div className="orb orb-a"/><div className="orb orb-b"/><div className="orb orb-c"/><div className="code-rain">{streams.map(stream=><motion.span key={stream.index} className={`code-stream code-stream-${stream.index%3}`} style={{left:stream.left,top:'-60vh'}} animate={{y:'180vh'}} transition={{duration:stream.duration,delay:stream.delay,repeat:Infinity,ease:'linear'}}>{stream.lines}</motion.span>)}</div></div>
+const skillGroups = [
+  {
+    title: "AI & cloud",
+    icon: Sparkles,
+    items: [
+      "Generative AI",
+      "LLM integration",
+      "Replicate",
+      "Cloudflare Workers",
+      "Firebase",
+      "Node.js",
+    ],
+  },
+  {
+    title: "Mobile engineering",
+    icon: Smartphone,
+    items: [
+      "Kotlin",
+      "Swift / UIKit",
+      "Flutter / Dart",
+      "Android SDK",
+      "iOS",
+      "MVVM",
+    ],
+  },
+  {
+    title: "Platforms & tooling",
+    icon: Server,
+    items: ["REST APIs", "WebSockets", "Firestore", "AWS S3", "Git", "CI/CD"],
+  },
+];
+const highlights = [
+  {
+    tag: "01 / BUILD",
+    title: "Native precision.",
+    description:
+      "Android and iOS experiences engineered with Kotlin, Swift, real-time data and robust application architecture.",
+  },
+  {
+    tag: "02 / CONNECT",
+    title: "AI that ships.",
+    description:
+      "LLM integrations, multimodal AI services, serverless endpoints and subscription-aware product flows.",
+  },
+  {
+    tag: "03 / DELIVER",
+    title: "From idea to release.",
+    description:
+      "Flutter products, platform integrations, testing, debugging and practical deployment workflows.",
+  },
+];
+function Background() {
+  const reduce = useReducedMotion();
+  const snippets = [
+    "const build = async () => {",
+    "  await deploy(app);",
+    "};",
+    "flutter run --release",
+    "fun createExperience()",
+    "suspend fun fetchData()",
+    "import SwiftUI",
+    "const ai = await infer()",
+    "git push origin main",
+    "POST /api/v1/generate",
+    "Firebase.initializeApp()",
+    "return Response.json(data)",
+    "// ship. learn. improve.",
+  ];
+  const streams = reduce
+    ? []
+    : Array.from({ length: 15 }, (_, index) => ({
+        index,
+        lines: Array.from(
+          { length: 11 },
+          (_, line) => snippets[(index * 3 + line * 5) % snippets.length],
+        ).join("\n"),
+        left: `${3 + index * 6.8}%`,
+        duration: 26 + (index % 6) * 5,
+        delay: -index * 3.7,
+      }));
+  return (
+    <div className="background" aria-hidden="true">
+      <div className="grid-lines" />
+      <div className="orb orb-a" />
+      <div className="orb orb-b" />
+      <div className="orb orb-c" />
+      <div className="code-rain">
+        {streams.map((stream) => (
+          <motion.span
+            key={stream.index}
+            className={`code-stream code-stream-${stream.index % 3}`}
+            style={{ left: stream.left, top: "-60vh" }}
+            animate={{ y: "180vh" }}
+            transition={{
+              duration: stream.duration,
+              delay: stream.delay,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            {stream.lines}
+          </motion.span>
+        ))}
+      </div>
+    </div>
+  );
 }
-function PhoneStack(){return <div className="phone-scene" aria-label="Illustrative mobile app screens"><div className="phone phone-left"><div className="notch"/><div className="phone-content ai-screen"><div className="tiny-label">GI / CONVERSATIONS</div><div className="ai-symbol">✺</div><div className="phone-heading">Find your<br/>clarity.</div><div className="chat-bubble received">What is troubling your mind today?</div><div className="chat-bubble sent">How do I stay focused?</div><div className="chat-bubble received">Focus on action, not the outcome.</div></div></div><div className="phone phone-right"><div className="notch"/><div className="phone-content video-screen"><div className="tiny-label">STREAM / WATCH</div><div className="poster"><Play size={28} fill="currentColor"/></div><div className="phone-heading">Stories in motion.</div><div className="video-tiles"><i/><i/><i/><i/></div></div></div><div className="phone phone-center"><div className="notch"/><div className="phone-content dash-screen"><div className="phone-top"><span>9:41</span><span className="tiny-avatar">KR</span></div><div className="tiny-label">ENGINEERED EXPERIENCES</div><div className="phone-heading">Build better.<br/><em>Every day.</em></div><div className="dashboard-card"><small>PRODUCT EXPERIENCE</small><strong>AI + MOBILE</strong><div className="bars">{[36,54,43,79,62,90,70].map((v,i)=><span key={i} style={{height:`${v}%`}}/>)}</div></div><div className="dashboard-row">✦ <span>AI-powered products</span> ↗</div><div className="dashboard-row">◈ <span>Native engineering</span> ↗</div><div className="dashboard-row">⌘ <span>Cloud integrations</span> ↗</div></div></div><span className="float-chip chip-one">✦ Generative AI</span><span className="float-chip chip-two">{'{ }'} Clean code</span><span className="float-chip chip-three">↗ Real products</span></div>}
-function Reveal({children,className=''}:{children:React.ReactNode;className?:string}){return <motion.div className={className} initial={{opacity:0,y:35}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.12}} transition={{duration:.65}}>{children}</motion.div>}
-function App(){const [light,setLight]=useState(false),[menu,setMenu]=useState(false),[filter,setFilter]=useState('All'),[slide,setSlide]=useState(0),[selected,setSelected]=useState<Project|null>(null),[emailStatus,setEmailStatus]=useState<'idle'|'sending'|'sent'|'error'>('idle');const reduce=useReducedMotion();const scrollToContact=(event:ReactMouseEvent<HTMLAnchorElement>)=>{event.preventDefault();const contact=document.getElementById('contact');if(!contact)return;contact.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});window.history.replaceState(null,'','#contact');setMenu(false)};const sendContactMessage=async(event:FormEvent<HTMLFormElement>)=>{event.preventDefault();const form=event.currentTarget;const values=new FormData(form);const name=String(values.get('name')||'').trim();const email=String(values.get('email')||'').trim();const subject=String(values.get('subject')||'').trim();const message=String(values.get('message')||'').trim();setEmailStatus('sending');try{await emailjs.send(emailJsConfig.serviceId,emailJsConfig.templateId,{name,email,from_name:name,reply_to:email,subject,message},{publicKey:emailJsConfig.publicKey});form.reset();setEmailStatus('sent');}catch(error){console.error('EmailJS send failed: '+JSON.stringify({status:(error as {status?:number}).status,text:(error as {text?:string}).text}));setEmailStatus('error');}};useEffect(()=>{document.documentElement.dataset.theme=light?'light':'dark'},[light]);useEffect(()=>{if(reduce)return;const t=setInterval(()=>setSlide(v=>(v+1)%highlights.length),5500);return()=>clearInterval(t)},[reduce]);useEffect(()=>{const key=(e:KeyboardEvent)=>{if(e.key==='Escape')setSelected(null)};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[]);const categories=['All','AI','Native','Flutter','Streaming'];const shown=projects.filter(p=>filter==='All'||(filter==='AI'&&p.type.includes('AI'))||(filter==='Native'&&p.type.includes('NATIVE'))||(filter==='Flutter'&&p.type.includes('FLUTTER'))||(filter==='Streaming'&&p.type.includes('TV')));return <><Background/><div className="site"><header className="topbar"><a href="#home" className="brand"><span className="brand-icon" aria-hidden="true">K</span><span>KIRAN RAMGADE<small>SOFTWARE ENGINEER</small></span></a><nav className={menu?'nav-links open':'nav-links'}>{['About','Work','Expertise','Experience','Education','Contact'].map(n=><a key={n} href={`#${n.toLowerCase()}`} onClick={()=>setMenu(false)}>{n}</a>)}</nav><div className="nav-actions"><button className="icon-button" onClick={()=>setLight(v=>!v)} aria-label={light?'Switch to dark theme':'Switch to light theme'}>{light?<Moon size={19}/>:<Sun size={19}/>}</button><a className="nav-contact" href="#contact" onClick={scrollToContact}>Let's connect <ArrowUpRight size={16}/></a><button className="icon-button menu-button" onClick={()=>setMenu(v=>!v)} aria-label="Toggle navigation">{menu?<X/>:<Menu/>}</button></div></header>
-<main><section id="home" className="hero container"><div className="hero-copy"><div className="identity-line"><code>$ whoami</code><span>Kiran Ramgade <i>·</i> Software Engineer</span></div><motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} className="eyebrow"><span className="status-dot"/> OPEN TO SOFTWARE & AI OPPORTUNITIES</motion.div><motion.h1 initial={{opacity:0,y:25}} animate={{opacity:1,y:0}} transition={{delay:.1}}>Code meets<br/><span className="gradient-text">curiosity.</span><br/>Ideas become<br/><i>experiences.</i></motion.h1><motion.p initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:.2}}>I'm <strong>Kiran Ramgade</strong> — a Software Engineer with 4+ years of experience building native Android and iOS applications, Flutter products, and AI-powered experiences. I connect thoughtful interfaces with real-world engineering.</motion.p><motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.3}} className="hero-buttons"><a className="button primary" href="#work">Explore my work <ArrowUpRight size={18}/></a><a className="button ghost" href="#contact" onClick={scrollToContact}>Get in touch <Mail size={17}/></a></motion.div><div className="hero-bottom"><span><Code2 size={16}/> Android · iOS · Flutter</span><span><Sparkles size={16}/> Generative AI · Cloud</span></div></div><motion.div initial={{opacity:0,scale:.94}} animate={{opacity:1,scale:1}} transition={{duration:.8,delay:.2}} className="hero-visual"><PhoneStack/></motion.div><a href="#about" className="scroll-hint">SCROLL TO EXPLORE <ArrowDownRight size={17}/></a></section>
-<section className="ticker" aria-label="Technology expertise"><div className="ticker-track">{Array.from({length:2},(_,j)=>['KOTLIN','SWIFT','FLUTTER','DART','GENERATIVE AI','TYPESCRIPT','FIREBASE','CLOUDFLARE','NODE.JS','REST APIs'].map((t,i)=><span key={`${j}-${i}`}><span className="ticker-star">✳</span>{t}</span>))}</div></section>
-<section id="about" className="section container"><Reveal><div className="section-kicker">01 / THE APPROACH</div><div className="about-grid"><h2>Engineering with<br/><span className="gradient-text">a product mindset.</span></h2><div><p className="section-lead">I enjoy working across the stack: crafting mobile interfaces, integrating APIs, building serverless services, and making AI useful inside real products.</p><div className="mini-stats"><div><strong>4+</strong><span>Years in software</span></div><div><strong>3</strong><span>Mobile platforms</span></div><div><strong>AI</strong><span>Product integrations</span></div></div></div><aside className="about-portrait"><img src={new URL('../images/kiran-professional-headshot.png',import.meta.url).href} alt="Kiran Ramgade" loading="lazy"/><div className="portrait-caption"><span className="status-dot"/> AVAILABLE FOR THE NEXT BUILD</div><strong>Kiran Ramgade</strong><small>Mobile · AI · Software Engineering</small></aside></div></Reveal></section>
-<section className="section feature-section"><div className="container"><Reveal><div className="section-kicker">02 / ENGINEERING NOTES</div><div className="feature-grid"><div><h2>Always building.<br/><span className="gradient-text">Always evolving.</span></h2><p className="section-lead">A few ways I approach modern software.</p><div className="slider-controls"><button aria-label="Previous highlight" onClick={()=>setSlide((slide+highlights.length-1)%highlights.length)}><ChevronLeft size={20}/></button><button aria-label="Next highlight" onClick={()=>setSlide((slide+1)%highlights.length)}><ChevronRight size={20}/></button><span>{String(slide+1).padStart(2,'0')} / 03</span></div></div><div className="slide-card"><div className="slide-top"><Code2/><span>ENGINEERING.LOG</span></div><AnimatePresence mode="wait"><motion.div key={slide} initial={{opacity:0,x:25}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-25}} transition={{duration:.35}}><div className="slide-tag">{highlights[slide].tag}</div><h3>{highlights[slide].title}</h3><p>{highlights[slide].description}</p></motion.div></AnimatePresence><div className="slide-progress">{highlights.map((_,i)=><button key={i} aria-label={`Show highlight ${i+1}`} className={i===slide?'active':''} onClick={()=>setSlide(i)}/>)}</div></div></div></Reveal></div></section>
-<section id="work" className="section container"><Reveal><div className="section-kicker">03 / SELECTED WORK</div><div className="section-title-row"><div><h2>Things I've <span className="gradient-text">built.</span></h2><p className="section-lead">AI products, mobile applications and streaming platforms.</p></div><span className="section-counter">06 PROJECTS / SELECTED</span></div></Reveal><div className="filters" role="group" aria-label="Filter projects">{categories.map(c=><button key={c} className={filter===c?'active':''} onClick={()=>setFilter(c)}>{c}</button>)}</div><div className="projects-grid">{shown.map((p,i)=><Reveal key={p.title}><button className={`project-card ${p.accent}`} onClick={()=>setSelected(p)}><div className="project-top"><span>{p.type}</span><ArrowUpRight size={19}/></div><div className="project-art"><span className="project-glyph">{p.logo?<img className="project-logo" src={p.logo} alt={`${p.title} logo`} width={112} height={112} loading="lazy"/>:p.glyph}</span><div className="art-orbit orbit-1"/><div className="art-orbit orbit-2"/></div><div className="project-info"><span className="project-num">0{i+1} / PROJECT</span><h3>{p.title}</h3><p>{p.description}</p><div className="tags">{p.tags.map(t=><span key={t}>{t}</span>)}</div><span className="view-detail">Explore project <ArrowUpRight size={15}/></span></div></button></Reveal>)}</div></section>
-<section id="expertise" className="section expertise-section"><div className="container"><Reveal><div className="section-kicker">04 / TECHNICAL TOOLKIT</div><h2>Tools are good.<br/><span className="gradient-text">Solutions are better.</span></h2></Reveal><div className="skills-grid">{skillGroups.map(g=><Reveal key={g.title}><div className="skill-card"><div className="skill-icon"><g.icon size={24}/></div><h3>{g.title}</h3><div className="skill-tags">{g.items.map(s=><span key={s}>{s}</span>)}</div></div></Reveal>)}</div><Reveal><div className="terminal"><div className="terminal-bar"><div className="terminal-dots"><i/><i/><i/></div><span>kiran@portfolio ~ / engineering</span></div><div className="terminal-lines"><p><span>$</span> whoami</p><p className="terminal-output">Software Engineer · Mobile + AI Applications</p><p><span>$</span> cat focus.json</p><p className="terminal-output">{'{ "build": "useful products", "stack": ["mobile", "AI", "cloud"], "status": "always learning" }'}</p><p><span>$</span> <span className="cursor">▌</span></p></div></div></Reveal></div></section>
-<section id="experience" className="section container"><Reveal><div className="section-kicker">05 / EXPERIENCE</div><h2>The <span className="gradient-text">journey.</span></h2></Reveal><div className="timeline"><Reveal><div className="timeline-item"><div className="timeline-date">JAN 2024 — PRESENT</div><div className="timeline-content"><h3>Mobile Application Developer</h3><span>Novora Technology Group · Bengaluru</span><p>Native Android (Kotlin), native iOS (Swift/UIKit) and Flutter development. Event apps, real-time messaging, REST integrations, Firebase/AWS services, authentication and release workflows.</p></div></div></Reveal><Reveal><div className="timeline-item"><div className="timeline-date">JUN 2022 — OCT 2023</div><div className="timeline-content"><h3>Software Engineer</h3><span>yvs.video · Hyderabad</span><p>Android and OTT engineering for streaming platforms, including Android TV and Fire TV. ExoPlayer/Media3, HLS/DASH, Widevine DRM, integrations, testing and production debugging.</p></div></div></Reveal><Reveal><div className="timeline-item"><div className="timeline-date">JAN 2022 — JUN 2022</div><div className="timeline-content"><h3>Trainee Software Engineer</h3><span>yvs.video · Hyderabad</span><p>Native Android development, UI implementation, REST integrations, testing and application troubleshooting.</p></div></div></Reveal></div></section>
-<section id="education" className="section education-section"><div className="container"><Reveal><div className="section-kicker">06 / EDUCATION & LEARNING</div><h2>Built on <span className="gradient-text">fundamentals.</span></h2></Reveal><div className="education-grid"><Reveal><div className="education-card"><span>2015 — 2020</span><h3>B.E. · Computer Engineering</h3><p>RMD Sinhgad School of Engineering</p></div></Reveal><Reveal><div className="education-card"><span>2012 — 2015</span><h3>Diploma · Computer Applications</h3><p>Ekalavya Shikshan Sanstha's Polytechnic</p></div></Reveal><Reveal><div className="education-card"><span>PROFESSIONAL DEVELOPMENT</span><h3>Generative AI & Multi-Agent Systems</h3><p>Coding Ninjas · Advanced Certification</p></div></Reveal></div></div></section>
-<section id="contact" className="section contact-section"><div className="container"><Reveal><div className="contact-panel"><div className="section-kicker">07 / LET'S CONNECT</div><h2>Have something<br/><span className="gradient-text">worth building?</span></h2><p>I'm interested in software engineering, AI application development and ambitious product challenges.</p><form className="contact-form" onSubmit={sendContactMessage}><label>Name<input name="name" type="text" autoComplete="name" maxLength={120} required placeholder="Your name"/></label><label>Email<input name="email" type="email" autoComplete="email" maxLength={254} required placeholder="you@example.com"/></label><label className="contact-form-full">Subject<input name="subject" type="text" maxLength={160} required placeholder="What would you like to discuss?"/></label><label className="contact-form-full">Message<textarea name="message" rows={5} maxLength={5000} required placeholder="Tell me a little about it..."/></label><button className="button primary contact-submit" type="submit" disabled={emailStatus==='sending'}>{emailStatus==='sending'?'Sending…':'Send message'} <ArrowUpRight size={18}/></button><div className="contact-form-full contact-status" aria-live="polite">{emailStatus==='sent'&&'Thanks — your message has been sent.'}{emailStatus==='error'&&'Sorry, your message could not be sent. Please try again or email me directly.'}</div></form><div className="contact-links"><a href="https://www.linkedin.com/in/kiranramgade/" target="_blank" rel="noreferrer"><Linkedin size={18}/> LinkedIn</a><a href="https://github.com/kiranramgade12" target="_blank" rel="noreferrer"><Github size={18}/> GitHub</a><a href="mailto:ramgadek95@gmail.com"><Mail size={18}/> Email</a></div></div></Reveal></div></section></main><footer className="footer container"><span>© {new Date().getFullYear()} Kiran Ramgade</span><a href="#home">BACK TO TOP ↑</a></footer></div><AnimatePresence>{selected&&<motion.div className="modal-backdrop" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={()=>setSelected(null)}><motion.div role="dialog" aria-modal="true" aria-label={`${selected.title} details`} className="modal" initial={{scale:.94,y:20}} animate={{scale:1,y:0}} exit={{scale:.94,y:20}} onClick={e=>e.stopPropagation()}><button className="modal-close" aria-label="Close project details" onClick={()=>setSelected(null)}><X size={20}/></button><span className="section-kicker">{selected.type} / PROJECT OVERVIEW</span><h2>{selected.title}</h2><p>{selected.description}</p><div className="modal-details">{selected.details.map((d,i)=><div key={i}><ShieldCheck size={17}/><span>{d}</span></div>)}</div><div className="tags">{selected.tags.map(t=><span key={t}>{t}</span>)}</div></motion.div></motion.div>}</AnimatePresence></>}
+function PhoneStack() {
+  return (
+    <div className="phone-scene" aria-label="Illustrative mobile app screens">
+      <div className="phone phone-left">
+        <div className="notch" />
+        <div className="phone-content ai-screen">
+          <div className="tiny-label">GI / CONVERSATIONS</div>
+          <div className="ai-symbol">✺</div>
+          <div className="phone-heading">
+            Find your
+            <br />
+            clarity.
+          </div>
+          <div className="chat-bubble received">
+            What is troubling your mind today?
+          </div>
+          <div className="chat-bubble sent">How do I stay focused?</div>
+          <div className="chat-bubble received">
+            Focus on action, not the outcome.
+          </div>
+        </div>
+      </div>
+      <div className="phone phone-right">
+        <div className="notch" />
+        <div className="phone-content video-screen">
+          <div className="tiny-label">STREAM / WATCH</div>
+          <div className="poster">
+            <Play size={28} fill="currentColor" />
+          </div>
+          <div className="phone-heading">Stories in motion.</div>
+          <div className="video-tiles">
+            <i />
+            <i />
+            <i />
+            <i />
+          </div>
+        </div>
+      </div>
+      <div className="phone phone-center">
+        <div className="notch" />
+        <div className="phone-content dash-screen">
+          <div className="phone-top">
+            <span>9:41</span>
+            <span className="tiny-avatar">KR</span>
+          </div>
+          <div className="tiny-label">ENGINEERED EXPERIENCES</div>
+          <div className="phone-heading">
+            Build better.
+            <br />
+            <em>Every day.</em>
+          </div>
+          <div className="dashboard-card">
+            <small>PRODUCT EXPERIENCE</small>
+            <strong>AI + MOBILE</strong>
+            <div className="bars">
+              {[36, 54, 43, 79, 62, 90, 70].map((v, i) => (
+                <span key={i} style={{ height: `${v}%` }} />
+              ))}
+            </div>
+          </div>
+          <div className="dashboard-row">
+            ✦ <span>AI-powered products</span> ↗
+          </div>
+          <div className="dashboard-row">
+            ◈ <span>Native engineering</span> ↗
+          </div>
+          <div className="dashboard-row">
+            ⌘ <span>Cloud integrations</span> ↗
+          </div>
+        </div>
+      </div>
+      <span className="float-chip chip-one">✦ Generative AI</span>
+      <span className="float-chip chip-two">{"{ }"} Clean code</span>
+      <span className="float-chip chip-three">↗ Real products</span>
+    </div>
+  );
+}
+function Reveal({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 35 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.65 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+function App() {
+  const [light, setLight] = useState(false),
+    [menu, setMenu] = useState(false),
+    [filter, setFilter] = useState("All"),
+    [slide, setSlide] = useState(0),
+    [selected, setSelected] = useState<Project | null>(null),
+    [emailStatus, setEmailStatus] = useState<
+      "idle" | "sending" | "sent" | "error"
+    >("idle");
+  const reduce = useReducedMotion();
+  const scrollToContact = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const contact = document.getElementById("contact");
+    if (!contact) return;
+    contact.scrollIntoView({
+      behavior: reduce ? "auto" : "smooth",
+      block: "start",
+    });
+    window.history.replaceState(null, "", "#contact");
+    setMenu(false);
+  };
+  const sendContactMessage = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    const name = String(values.get("name") || "").trim();
+    const email = String(values.get("email") || "").trim();
+    const subject = String(values.get("subject") || "").trim();
+    const message = String(values.get("message") || "").trim();
+    setEmailStatus("sending");
+    try {
+      await emailjs.send(
+        emailJsConfig.serviceId,
+        emailJsConfig.templateId,
+        { name, email, from_name: name, reply_to: email, subject, message },
+        { publicKey: emailJsConfig.publicKey },
+      );
+      form.reset();
+      setEmailStatus("sent");
+    } catch (error) {
+      console.error(
+        "EmailJS send failed: " +
+          JSON.stringify({
+            status: (error as { status?: number }).status,
+            text: (error as { text?: string }).text,
+          }),
+      );
+      setEmailStatus("error");
+    }
+  };
+  useEffect(() => {
+    document.documentElement.dataset.theme = light ? "light" : "dark";
+  }, [light]);
+  useEffect(() => {
+    if (reduce) return;
+    const t = setInterval(
+      () => setSlide((v) => (v + 1) % highlights.length),
+      5500,
+    );
+    return () => clearInterval(t);
+  }, [reduce]);
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, []);
+  const categories = ["All", "AI", "Native", "Flutter", "Streaming"];
+  const shown = projects.filter(
+    (p) =>
+      filter === "All" ||
+      (filter === "AI" && p.type.includes("AI")) ||
+      (filter === "Native" && p.type.includes("NATIVE")) ||
+      (filter === "Flutter" && p.type.includes("FLUTTER")) ||
+      (filter === "Streaming" && p.type.includes("TV")),
+  );
+  return (
+    <>
+      <Background />
+      <div className="site">
+        <header className="topbar">
+          <a href="#home" className="brand">
+            <span className="brand-icon" aria-hidden="true">
+              K
+            </span>
+            <span>
+              KIRAN RAMGADE<small>SOFTWARE ENGINEER</small>
+            </span>
+          </a>
+          <nav className={menu ? "nav-links open" : "nav-links"}>
+            {[
+              "About",
+              "Work",
+              "Expertise",
+              "Experience",
+              "Education",
+              "Contact",
+            ].map((n) => (
+              <a
+                key={n}
+                href={`#${n.toLowerCase()}`}
+                onClick={() => setMenu(false)}
+              >
+                {n}
+              </a>
+            ))}
+          </nav>
+          <div className="nav-actions">
+            <button
+              className="icon-button"
+              onClick={() => setLight((v) => !v)}
+              aria-label={
+                light ? "Switch to dark theme" : "Switch to light theme"
+              }
+            >
+              {light ? <Moon size={19} /> : <Sun size={19} />}
+            </button>
+            <a
+              className="nav-contact"
+              href="#contact"
+              onClick={scrollToContact}
+            >
+              Let's connect <ArrowUpRight size={16} />
+            </a>
+            <button
+              className="icon-button menu-button"
+              onClick={() => setMenu((v) => !v)}
+              aria-label="Toggle navigation"
+            >
+              {menu ? <X /> : <Menu />}
+            </button>
+          </div>
+        </header>
+        <main>
+          <section id="home" className="hero container">
+            <div className="hero-copy">
+              <div className="identity-line">
+                <code>$ whoami</code>
+                <span>
+                  Kiran Ramgade <i>·</i> Software Engineer
+                </span>
+              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="eyebrow"
+              >
+                <span className="status-dot" /> OPEN TO SOFTWARE & AI
+                OPPORTUNITIES
+              </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                Code meets
+                <br />
+                <span className="gradient-text">curiosity.</span>
+                <br />
+                Ideas become
+                <br />
+                <i>experiences.</i>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                I'm <strong>Kiran Ramgade</strong> — a Software Engineer with 4+
+                years of experience building native Android and iOS
+                applications, Flutter products, and AI-powered experiences. I
+                connect thoughtful interfaces with real-world engineering.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="hero-buttons"
+              >
+                <a className="button primary" href="#work">
+                  Explore my work <ArrowUpRight size={18} />
+                </a>
+                <a
+                  className="button ghost"
+                  href="#contact"
+                  onClick={scrollToContact}
+                >
+                  Get in touch <Mail size={17} />
+                </a>
+              </motion.div>
+              <div className="hero-bottom">
+                <span>
+                  <Code2 size={16} /> Android · iOS · Flutter
+                </span>
+                <span>
+                  <Sparkles size={16} /> Generative AI · Cloud
+                </span>
+              </div>
+            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="hero-visual"
+            >
+              <PhoneStack />
+            </motion.div>
+            <a href="#about" className="scroll-hint">
+              SCROLL TO EXPLORE <ArrowDownRight size={17} />
+            </a>
+          </section>
+          <section className="ticker" aria-label="Technology expertise">
+            <div className="ticker-track">
+              {Array.from({ length: 2 }, (_, j) =>
+                [
+                  "KOTLIN",
+                  "SWIFT",
+                  "FLUTTER",
+                  "DART",
+                  "GENERATIVE AI",
+                  "TYPESCRIPT",
+                  "FIREBASE",
+                  "CLOUDFLARE",
+                  "NODE.JS",
+                  "REST APIs",
+                ].map((t, i) => (
+                  <span key={`${j}-${i}`}>
+                    <span className="ticker-star">✳</span>
+                    {t}
+                  </span>
+                )),
+              )}
+            </div>
+          </section>
+          <section id="about" className="section container">
+            <Reveal>
+              <div className="section-kicker">01 / THE APPROACH</div>
+              <div className="about-grid">
+                <h2>
+                  Engineering with
+                  <br />
+                  <span className="gradient-text">a product mindset.</span>
+                </h2>
+                <div>
+                  <p className="section-lead">
+                    I enjoy working across the stack: crafting mobile
+                    interfaces, integrating APIs, building serverless services,
+                    and making AI useful inside real products.
+                  </p>
+                  <div className="mini-stats">
+                    <div>
+                      <strong>4+</strong>
+                      <span>Years in software</span>
+                    </div>
+                    <div>
+                      <strong>3</strong>
+                      <span>Mobile platforms</span>
+                    </div>
+                    <div>
+                      <strong>AI</strong>
+                      <span>Product integrations</span>
+                    </div>
+                  </div>
+                </div>
+                <aside className="about-portrait">
+                  <img
+                    src={
+                      new URL(
+                        "../images/kiran-professional-headshot.png",
+                        import.meta.url,
+                      ).href
+                    }
+                    alt="Kiran Ramgade"
+                    loading="lazy"
+                  />
+                  <div className="portrait-caption">
+                    <span className="status-dot" /> AVAILABLE FOR THE NEXT BUILD
+                  </div>
+                  <strong>Kiran Ramgade</strong>
+                  <small>Mobile · AI · Software Engineering</small>
+                </aside>
+              </div>
+            </Reveal>
+          </section>
+          <section className="section feature-section">
+            <div className="container">
+              <Reveal>
+                <div className="section-kicker">02 / ENGINEERING NOTES</div>
+                <div className="feature-grid">
+                  <div>
+                    <h2>
+                      Always building.
+                      <br />
+                      <span className="gradient-text">Always evolving.</span>
+                    </h2>
+                    <p className="section-lead">
+                      A few ways I approach modern software.
+                    </p>
+                    <div className="slider-controls">
+                      <button
+                        aria-label="Previous highlight"
+                        onClick={() =>
+                          setSlide(
+                            (slide + highlights.length - 1) % highlights.length,
+                          )
+                        }
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+                      <button
+                        aria-label="Next highlight"
+                        onClick={() =>
+                          setSlide((slide + 1) % highlights.length)
+                        }
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                      <span>{String(slide + 1).padStart(2, "0")} / 03</span>
+                    </div>
+                  </div>
+                  <div className="slide-card">
+                    <div className="slide-top">
+                      <Code2 />
+                      <span>ENGINEERING.LOG</span>
+                    </div>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={slide}
+                        initial={{ opacity: 0, x: 25 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -25 }}
+                        transition={{ duration: 0.35 }}
+                      >
+                        <div className="slide-tag">{highlights[slide].tag}</div>
+                        <h3>{highlights[slide].title}</h3>
+                        <p>{highlights[slide].description}</p>
+                      </motion.div>
+                    </AnimatePresence>
+                    <div className="slide-progress">
+                      {highlights.map((_, i) => (
+                        <button
+                          key={i}
+                          aria-label={`Show highlight ${i + 1}`}
+                          className={i === slide ? "active" : ""}
+                          onClick={() => setSlide(i)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+          <section id="work" className="section container">
+            <Reveal>
+              <div className="section-kicker">03 / SELECTED WORK</div>
+              <div className="section-title-row">
+                <div>
+                  <h2>
+                    Things I've <span className="gradient-text">built.</span>
+                  </h2>
+                  <p className="section-lead">
+                    AI products, mobile applications and streaming platforms.
+                  </p>
+                </div>
+                <span className="section-counter">06 PROJECTS / SELECTED</span>
+              </div>
+            </Reveal>
+            <div className="filters" role="group" aria-label="Filter projects">
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  className={filter === c ? "active" : ""}
+                  onClick={() => setFilter(c)}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+            <div className="projects-grid">
+              {shown.map((p, i) => (
+                <Reveal key={p.title}>
+                  <button
+                    className={`project-card ${p.accent}`}
+                    onClick={() => setSelected(p)}
+                  >
+                    <div className="project-top">
+                      <span>{p.type}</span>
+                      <ArrowUpRight size={19} />
+                    </div>
+                    <div className="project-art">
+                      <span className="project-glyph">
+                        {p.logo ? (
+                          <img
+                            className="project-logo"
+                            src={p.logo}
+                            alt={`${p.title} logo`}
+                            width={112}
+                            height={112}
+                            loading="lazy"
+                          />
+                        ) : (
+                          p.glyph
+                        )}
+                      </span>
+                      <div className="art-orbit orbit-1" />
+                      <div className="art-orbit orbit-2" />
+                    </div>
+                    <div className="project-info">
+                      <span className="project-num">0{i + 1} / PROJECT</span>
+                      <h3>{p.title}</h3>
+                      <p>{p.description}</p>
+                      <div className="tags">
+                        {p.tags.map((t) => (
+                          <span key={t}>{t}</span>
+                        ))}
+                      </div>
+                      <span className="view-detail">
+                        Explore project <ArrowUpRight size={15} />
+                      </span>
+                    </div>
+                  </button>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+          <section id="expertise" className="section expertise-section">
+            <div className="container">
+              <Reveal>
+                <div className="section-kicker">04 / TECHNICAL TOOLKIT</div>
+                <h2>
+                  Tools are good.
+                  <br />
+                  <span className="gradient-text">Solutions are better.</span>
+                </h2>
+              </Reveal>
+              <div className="skills-grid">
+                {skillGroups.map((g) => (
+                  <Reveal key={g.title}>
+                    <div className="skill-card">
+                      <div className="skill-icon">
+                        <g.icon size={24} />
+                      </div>
+                      <h3>{g.title}</h3>
+                      <div className="skill-tags">
+                        {g.items.map((s) => (
+                          <span key={s}>{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+              <Reveal>
+                <div className="terminal">
+                  <div className="terminal-bar">
+                    <div className="terminal-dots">
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                    <span>kiran@portfolio ~ / engineering</span>
+                  </div>
+                  <div className="terminal-lines">
+                    <p>
+                      <span>$</span> whoami
+                    </p>
+                    <p className="terminal-output">
+                      Software Engineer · Mobile + AI Applications
+                    </p>
+                    <p>
+                      <span>$</span> cat focus.json
+                    </p>
+                    <p className="terminal-output">
+                      {
+                        '{ "build": "useful products", "stack": ["mobile", "AI", "cloud"], "status": "always learning" }'
+                      }
+                    </p>
+                    <p>
+                      <span>$</span> <span className="cursor">▌</span>
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+          <section id="experience" className="section container">
+            <Reveal>
+              <div className="section-kicker">05 / EXPERIENCE</div>
+              <h2>
+                The <span className="gradient-text">journey.</span>
+              </h2>
+            </Reveal>
+            <div className="timeline">
+              <Reveal>
+                <div className="timeline-item">
+                  <div className="timeline-date">JAN 2024 — PRESENT</div>
+                  <div className="timeline-content">
+                    <h3>Mobile Application Developer</h3>
+                    <span>Novora Technology Group · Bengaluru</span>
+                    <p>
+                      Native Android (Kotlin), native iOS (Swift/UIKit) and
+                      Flutter development. Event apps, real-time messaging, REST
+                      integrations, Firebase/AWS services, authentication and
+                      release workflows.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+              <Reveal>
+                <div className="timeline-item">
+                  <div className="timeline-date">JUN 2022 — OCT 2023</div>
+                  <div className="timeline-content">
+                    <h3>Software Engineer</h3>
+                    <span>yvs.video · Hyderabad</span>
+                    <p>
+                      Android and OTT engineering for streaming platforms,
+                      including Android TV and Fire TV. ExoPlayer/Media3,
+                      HLS/DASH, Widevine DRM, integrations, testing and
+                      production debugging.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+              <Reveal>
+                <div className="timeline-item">
+                  <div className="timeline-date">JAN 2022 — JUN 2022</div>
+                  <div className="timeline-content">
+                    <h3>Trainee Software Engineer</h3>
+                    <span>yvs.video · Hyderabad</span>
+                    <p>
+                      Native Android development, UI implementation, REST
+                      integrations, testing and application troubleshooting.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+          <section id="education" className="section education-section">
+            <div className="container">
+              <Reveal>
+                <div className="section-kicker">06 / EDUCATION & LEARNING</div>
+                <h2>
+                  Built on <span className="gradient-text">fundamentals.</span>
+                </h2>
+              </Reveal>
+              <div className="education-grid">
+                <Reveal>
+                  <div className="education-card">
+                    <span>2015 — 2020</span>
+                    <h3>B.E. · Computer Engineering</h3>
+                    <p>RMD Sinhgad School of Engineering</p>
+                  </div>
+                </Reveal>
+                <Reveal>
+                  <div className="education-card">
+                    <span>2012 — 2015</span>
+                    <h3>Diploma · Computer Applications</h3>
+                    <p>Ekalavya Shikshan Sanstha's Polytechnic</p>
+                  </div>
+                </Reveal>
+                <Reveal>
+                  <div className="education-card">
+                    <span>PROFESSIONAL DEVELOPMENT</span>
+                    <h3>Generative AI & Multi-Agent Systems</h3>
+                    <p>Coding Ninjas · Advanced Certification</p>
+                  </div>
+                </Reveal>
+              </div>
+            </div>
+          </section>
+          <section id="contact" className="section contact-section">
+            <div className="container">
+              <Reveal>
+                <div className="contact-panel">
+                  <div className="section-kicker">07 / LET'S CONNECT</div>
+                  <h2>
+                    Have something
+                    <br />
+                    <span className="gradient-text">worth building?</span>
+                  </h2>
+                  <p>
+                    I'm interested in software engineering, AI application
+                    development and ambitious product challenges.
+                  </p>
+                  <form className="contact-form" onSubmit={sendContactMessage}>
+                    <label>
+                      Name
+                      <input
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        maxLength={120}
+                        required
+                        placeholder="Your name"
+                      />
+                    </label>
+                    <label>
+                      Email
+                      <input
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        maxLength={254}
+                        required
+                        placeholder="you@example.com"
+                      />
+                    </label>
+                    <label className="contact-form-full">
+                      Subject
+                      <input
+                        name="subject"
+                        type="text"
+                        maxLength={160}
+                        required
+                        placeholder="What would you like to discuss?"
+                      />
+                    </label>
+                    <label className="contact-form-full">
+                      Message
+                      <textarea
+                        name="message"
+                        rows={5}
+                        maxLength={5000}
+                        required
+                        placeholder="Tell me a little about it..."
+                      />
+                    </label>
+                    <button
+                      className="button primary contact-submit"
+                      type="submit"
+                      disabled={emailStatus === "sending"}
+                    >
+                      {emailStatus === "sending" ? "Sending…" : "Send message"}{" "}
+                      <ArrowUpRight size={18} />
+                    </button>
+                    <div
+                      className="contact-form-full contact-status"
+                      aria-live="polite"
+                    >
+                      {emailStatus === "sent" &&
+                        "Thanks — your message has been sent."}
+                      {emailStatus === "error" &&
+                        "Sorry, your message could not be sent. Please try again or email me directly."}
+                    </div>
+                  </form>
+                  <div className="contact-links">
+                    <a
+                      href="https://www.linkedin.com/in/kiranramgade/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Linkedin size={18} /> LinkedIn
+                    </a>
+                    <a
+                      href="https://github.com/kiranramgade12"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Github size={18} /> GitHub
+                    </a>
+                    <a href="mailto:ramgadek95@gmail.com">
+                      <Mail size={18} /> Email
+                    </a>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+        </main>
+        <footer className="footer container">
+          <span>© {new Date().getFullYear()} Kiran Ramgade</span>
+          <a href="#home">BACK TO TOP ↑</a>
+        </footer>
+      </div>
+      <AnimatePresence>
+        {selected && (
+          <motion.div
+            className="modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelected(null)}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${selected.title} details`}
+              className="modal"
+              initial={{ scale: 0.94, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.94, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="modal-close"
+                aria-label="Close project details"
+                onClick={() => setSelected(null)}
+              >
+                <X size={20} />
+              </button>
+              <span className="section-kicker">
+                {selected.type} / PROJECT OVERVIEW
+              </span>
+              <h2>{selected.title}</h2>
+              <p>{selected.description}</p>
+              <div className="modal-details">
+                {selected.details.map((d, i) => (
+                  <div key={i}>
+                    <ShieldCheck size={17} />
+                    <span>{d}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="tags">
+                {selected.tags.map((t) => (
+                  <span key={t}>{t}</span>
+                ))}
+              </div>
+              {selected.link && (
+                <a className="store-link" href={selected.link} target="_blank" rel="noreferrer">
+                  View on Google Play <ExternalLink size={16} />
+                </a>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 export default App;
